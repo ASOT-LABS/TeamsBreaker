@@ -1,0 +1,13 @@
+message: |
+         Hi {{userPrincipalName}},
+
+         Please enter <a href="https://www.google.com" title="click here">here</a> soon, or your access will be revoked.
+
+         Kind regards,
+         The real IT Team. (not a 🐟)
+chat_title: "Meeting bypass"
+attachment: ../example4.txt
+user_list: ../user_list.txt
+log: send_{time}.log
+# Bypass method used to create chat with victim. (meeting, closed_chat)
+method: closed_chat

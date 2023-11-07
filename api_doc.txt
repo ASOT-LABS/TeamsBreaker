@@ -1,0 +1,6332 @@
+# https://gist.github.com/ardatan/a4a619d6d1a4daa3b65287d0298e50e0
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Messaging API Service",
+    "contact": {
+      "email": "skypeplatformapidev@microsoft.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://msgapi.int.teams.microsoft.com"
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": [
+          "Probe"
+        ],
+        "description": "Basic healthcheck operation",
+        "responses": {
+          "200": {
+            "description": "Service instance is healthy"
+          },
+          "503": {
+            "description": "Service instance is unhealthy"
+          }
+        }
+      }
+    },
+    "/diagnostics/thread": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "summary": "Get the diagnostic resource of a generic thread.",
+        "description": "Retrieves a thread with customer data scrubbed.",
+        "parameters": [
+          {
+            "name": "threadId",
+            "in": "query",
+            "description": "Thread identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread was successfully retrieved from store. The response contains scrubbbed GetThreadsResponse.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagnosticResponseBody"
+                }
+              }
+            }
+          },
+          "307": {
+            "description": "Requested resource belongs to another deployment-group"
+          },
+          "400": {
+            "description": "Validation of input parameters failed. Client error."
+          },
+          "401": {
+            "description": "Invalid mtls certificate provided by client."
+          },
+          "403": {
+            "description": "Request initiator is not allowed to access diagnostic resource. ACL check failed."
+          },
+          "404": {
+            "description": "Thread with input threadId and locationType was not found in store."
+          },
+          "500": {
+            "description": "Internal server error. Client can retry for a limited number of times."
+          }
+        }
+      }
+    },
+    "/diagnostics/members": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "summary": "Gets the diagnostic resource of the list of members in a generic thread roster.",
+        "description": "Retrieve roster members in a generic thread with customer data scrubbed.",
+        "parameters": [
+          {
+            "name": "threadId",
+            "in": "query",
+            "description": "Thread identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rosterId",
+            "in": "query",
+            "description": "Roster identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rosterVersion",
+            "in": "query",
+            "description": "Version of the roster desired.",
+            "schema": {
+              "type": "integer",
+              "format": "uint64"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "The number of roster members being requested. Default is 200.",
+            "schema": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generic thread roster members were successfully retrieved from store. The response contains scrubbbed GetMembersResponse.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMembersResponse"
+                }
+              }
+            }
+          },
+          "307": {
+            "description": "Requested resource belongs to another deployment-group"
+          },
+          "400": {
+            "description": "Validation of input parameters failed. Client error."
+          },
+          "401": {
+            "description": "Invalid mtls certificate provided by client."
+          },
+          "403": {
+            "description": "Request initiator is not allowed to access diagnostic resource. ACL check failed."
+          },
+          "404": {
+            "description": "Thread with input threadId was not found in store."
+          },
+          "500": {
+            "description": "Internal server error. Client can retry for a limited number of times."
+          }
+        }
+      }
+    },
+    "/diagnostics/member": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "summary": "Gets the diagnostic resource of a member in a generic thread roster.",
+        "description": "Retrieve a member in a generic thread roster with customer data scrubbed.",
+        "parameters": [
+          {
+            "name": "threadId",
+            "in": "query",
+            "description": "Thread identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rosterId",
+            "in": "query",
+            "description": "Roster identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "query",
+            "description": "Member identifier.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generic thread roster members were successfully retrieved from store The response contains scrubbbed Member.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagnosticResponseBody"
+                }
+              }
+            }
+          },
+          "307": {
+            "description": "Requested resource belongs to another deployment-group"
+          },
+          "400": {
+            "description": "Validation of input parameters failed. Client error."
+          },
+          "401": {
+            "description": "Invalid mtls certificate provided by client."
+          },
+          "403": {
+            "description": "Request initiator is not allowed to access diagnostic resource. ACL check failed."
+          },
+          "404": {
+            "description": "Thread with input threadId was not found in store."
+          },
+          "500": {
+            "description": "Internal server error. Client can retry for a limited number of times."
+          }
+        }
+      }
+    },
+    "/v1/events/relationshipChanges": {
+      "post": {
+        "tags": [
+          "User relationship"
+        ],
+        "description": "User relationship status update",
+        "requestBody": {
+          "description": "User relationship data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelationshipUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "User relationship update processed successfully"
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "name": "ClientInfo",
+          "in": "header",
+          "description": "generic header for passing client properties in form of semicolon-separated set of name=value pairs. This API requires that productContext attribute is present in the header and specifies network type associated with the relationship event. Allowed values: SFL, TFL. SFL means Skype For Life network, TFL means Teams For Life network.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/ClientInfoContent"
+          },
+          "example": "productContext=TFL"
+        }
+      ]
+    },
+    "/v1/threads": {
+      "post": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to create a new thread",
+        "requestBody": {
+          "description": "Thread to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThreadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Thread was successfully created",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "207": {
+            "description": "Not all of specified thread members were successfully added to the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertThreadMembersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get list of threads",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadIds"
+          },
+          {
+            "$ref": "#/components/parameters/allowDeleted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Threads were successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input, e.g. too many threads are requested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/threads/{threadId}": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get a thread",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          },
+          {
+            "$ref": "#/components/parameters/allowDeleted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread was successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thread"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to soft delete a thread",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/trigger"
+          },
+          {
+            "$ref": "#/components/parameters/hardDelete"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread was successfully deleted",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/properties/{propertyName}": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get a thread property",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/propertyName"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          },
+          {
+            "$ref": "#/components/parameters/allowDeleted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread property was successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadPropertyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided property name or thread Id were not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/properties": {
+      "put": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to change thread properties",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          },
+          {
+            "$ref": "#/components/parameters/allowDeleted"
+          }
+        ],
+        "requestBody": {
+          "description": "List of properties to be set to the thread",
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ThreadDescriptionProperty"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ThreadJoiningEnabledProperty"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ThreadTemplateTypeProperty"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ThreadTopicProperty"
+                  }
+                ],
+                "description": "Map of thread properties used during thread properties update. Thread properties values are not sanitized.",
+                "example": {
+                  "description": "string",
+                  "joiningenabled": "string",
+                  "templateType": "Chat",
+                  "topic": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Thread update was successful",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/members": {
+      "post": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to add members to thread roster",
+        "requestBody": {
+          "description": "List of users to be added to request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertThreadMembersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "All members were successfully added to the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "207": {
+            "description": "Not all of specified thread members were successfully added to the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertThreadMembersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to update members on thread roster",
+        "requestBody": {
+          "description": "List of users to be updated and fields to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertThreadMembersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "All members were successfully updated in the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "207": {
+            "description": "Not all of specified thread members were successfully updated in the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpsertThreadMembersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get members from thread roster",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/view"
+          },
+          {
+            "$ref": "#/components/parameters/selectMemberProperties"
+          },
+          {
+            "$ref": "#/components/parameters/memberIds"
+          },
+          {
+            "$ref": "#/components/parameters/paginatedQueryParameters"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All members were successfully retrieved from the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GetMembersResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GetMembersByIdResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to remove members to thread roster",
+        "requestBody": {
+          "description": "List of members to be removed",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteThreadMembersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "All members were removed successfully",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "207": {
+            "description": "Not all members were removed successfully",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteThreadMembersPartialResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/allowDeleted"
+        }
+      ]
+    },
+    "/v1/threads/{threadId}/members/{memberId}": {
+      "put": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to modify thread member roles and properties",
+        "requestBody": {
+          "description": "New role and properties of the thread member",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutThreadMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Thread member role and properties were successfully updated",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get a specific roster member from the thread roster",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/view"
+          },
+          {
+            "$ref": "#/components/parameters/selectMemberProperties"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The member was successfully retrieved from the roster",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Member"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id or roster member id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to delete member from thread roster",
+        "responses": {
+          "200": {
+            "description": "Member was successfully removed from the thread",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/memberId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/allowDeleted"
+        }
+      ]
+    },
+    "/v1/threads/{threadId}/location": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get thread geo, environment location and tenant Id.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread location and tenantId were successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadLocationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/permissions": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get the permissions of the caller to the thread.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          },
+          {
+            "$ref": "#/components/parameters/checkTime"
+          },
+          {
+            "$ref": "#/components/parameters/timeWindow"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User has access to the thread at the given time. A body is returned for easier extensibility in the future without changing the API.",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadPermissionsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The caller does not have any permissions for the thread at the given time."
+          },
+          "404": {
+            "description": "Provided thread id does not exist."
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/consumptionhorizons": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Request to get the latest consumption horizons of the roster members on the thread",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consumption horizon values retrieved successfully.",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadConsumptionHorizonsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The caller does not have any permissions for the thread at the given time."
+          },
+          "404": {
+            "description": "Provided thread id does not exist."
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/roster/changelog": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "description": "Retrieve changelog for a thread",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/startRosterVersion"
+          },
+          {
+            "$ref": "#/components/parameters/endRosterVersion"
+          },
+          {
+            "$ref": "#/components/parameters/changelogPageSize"
+          },
+          {
+            "$ref": "#/components/parameters/cursor"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Roster changelog was successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRosterChangelogResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/snapshots": {
+      "get": {
+        "tags": [
+          "Thread management"
+        ],
+        "summary": "Get the snapshots that exist on a thread.",
+        "description": "Gets the list of snapshots for a thread. Each snapshot view returned contains only the userId field of the full snapshot.",
+        "operationId": "GetThreadSnapshots",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/OnBehalfOf"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The thread has snapshots. The response body will contain snapshot views for each snapshot found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetThreadSnapshotsResponseBody"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Either the thread with threadId provided does not exist, or it has no snapshots.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "description": "Internal server error. Client can retry for a limited number of times."
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/snapshots/{snapshotId}": {
+      "delete": {
+        "tags": [
+          "Thread management"
+        ],
+        "summary": "Deletes a snapshot.",
+        "description": "Deletes a snapshot of the thread with the given id.",
+        "operationId": "DeleteThreadSnapshot",
+        "responses": {
+          "200": {
+            "description": "The snapshot was successfully deleted."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Resource identified by threadId and snapshotId was not found in store."
+          },
+          "500": {
+            "description": "Internal server error. Client can retry for a limited number of times."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/snapshotId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/{threadId}/messages": {
+      "post": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to create a new message",
+        "requestBody": {
+          "description": "Message to be sent",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Message was successfully created",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to get a page of messages",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/startTime"
+          },
+          {
+            "$ref": "#/components/parameters/syncState"
+          },
+          {
+            "$ref": "#/components/parameters/startId"
+          },
+          {
+            "$ref": "#/components/parameters/endId"
+          },
+          {
+            "$ref": "#/components/parameters/sortOrderAsc"
+          },
+          {
+            "$ref": "#/components/parameters/queryOnProperty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages were successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMessagesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/{threadId}/messages/{messageId}": {
+      "get": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to get a specific message",
+        "responses": {
+          "200": {
+            "description": "Message was successfully retrieved",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to update a message.",
+        "requestBody": {
+          "description": "Update for message",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message was successfully updated",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "501": {
+            "$ref": "#/components/responses/NotImplemented"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to soft delete or hard delete (depending on the hardDelete parameter) a message. Default is soft delete. Hard Delete on messages is only enabled for specific partners through a different URI route.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/trigger"
+          },
+          {
+            "$ref": "#/components/parameters/createTombstone"
+          },
+          {
+            "$ref": "#/components/parameters/hardDelete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message was successfully soft deleted",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided threadId was not found or provided messageId was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed because of optimistic concurrency on thread. Client can retry with exponential backoff.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/messageId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/{threadId}/messages/{messageId}/properties": {
+      "delete": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to delete or recover(if passed \"deletetime\" property) a message property.",
+        "requestBody": {
+          "description": "Message properties to be deleted/recovered",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "maxProperties": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message was successfully deleted/recovered",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Messaging operations"
+        ],
+        "description": "Request to update a message property.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/replace"
+          }
+        ],
+        "requestBody": {
+          "description": "Message properties to be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "maxProperties": 1,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message property was successfully updated",
+            "headers": {
+              "ThreadType": {
+                "$ref": "#/components/headers/ThreadTypeHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/messageId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/threads/{threadId}/messages/{messageId}/annotations": {
+      "get": {
+        "tags": [
+          "Annotations operations"
+        ],
+        "description": "Request to get list of annotations on a message",
+        "responses": {
+          "200": {
+            "description": "Annotations were successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAnnotationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/messageId"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/filter"
+        },
+        {
+          "$ref": "#/components/parameters/value"
+        },
+        {
+          "$ref": "#/components/parameters/cursor"
+        },
+        {
+          "$ref": "#/components/parameters/pageSize"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "Request to get list of conversations",
+        "responses": {
+          "200": {
+            "description": "Conversations were successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetConversationsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/pageSize"
+        },
+        {
+          "$ref": "#/components/parameters/startTime"
+        },
+        {
+          "$ref": "#/components/parameters/syncState"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/{conversationMri}": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "Request to get a conversation",
+        "responses": {
+          "200": {
+            "description": "Conversation was successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Conversation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided thread id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "deletes user conversation with particular id",
+        "parameters": [
+          {
+            "name": "hardDelete",
+            "in": "query",
+            "description": "When false user conversation is deleted only logically. When set to true user is deleted logically and time-to-live is also being applied on top of the record.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user conversation successfully deleted from the store"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestResponse"
+          },
+          "401": {
+            "description": "client was not authenticated, permanent error"
+          },
+          "403": {
+            "description": "client is not allowed to access the service, permanent error"
+          },
+          "404": {
+            "description": "user and/or conversation with given id does not exist on the service"
+          },
+          "429": {
+            "description": "request rate is too high, transient error, retry after some delay"
+          },
+          "500": {
+            "description": "unexpected server error, should be retried"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/conversationMri"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/{conversationMri}/properties": {
+      "put": {
+        "tags": [
+          "Conversation properties"
+        ],
+        "description": "Updating conversation properties",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bookmark"
+          },
+          {
+            "$ref": "#/components/parameters/requirePermanentJoinedState"
+          }
+        ],
+        "requestBody": {
+          "description": "Update for conversation property",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConversationProperty"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "conversation property information successfully updated from the store"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "user and/or conversation with given id does not exist on the service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Conversation properties"
+        ],
+        "description": "Deletes conversation properties",
+        "requestBody": {
+          "description": "Delete for conversation property",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConversationProperty"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "conversation property successfully deleted from the store"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "user and/or conversation with given id does not exist on the service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/conversationMri"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/conversations/user": {
+      "delete": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "switches the user location record into the soft-deleted state in which only read and delete operation are permitted on top of the user data",
+        "parameters": [
+          {
+            "name": "hardDelete",
+            "in": "query",
+            "description": "when true and all undeleted conversations for the user are removed, user location record state is set to hard-deleted; when true and conversations exist, any undeleted conversations are triggered for removal and 412 (precondition failed) is returned",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user location record has been switched to the soft-deleted state"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestResponse"
+          },
+          "401": {
+            "description": "client was not authenticated, permanent error"
+          },
+          "403": {
+            "description": "client is not allowed to access the service, permanent error"
+          },
+          "404": {
+            "description": "user with given id does not exist on the service"
+          },
+          "409": {
+            "description": "Only for hardDelete = true. User has existing conversations. Only users conversations has been queued for deletion. User deletion should be retried after several minutes"
+          },
+          "429": {
+            "description": "request rate is too high, transient error, retry after some delay"
+          },
+          "500": {
+            "description": "unexpected server error, should be retried."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/streams/{streamName}": {
+      "get": {
+        "tags": [
+          "Streams"
+        ],
+        "description": "Request to get a thread for personal user stream of the given name. If personal user stream does not exist, it will be created. This API is available only for clients and white-listed partners. For Teams users the request will fail on MFE.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/streamName"
+          },
+          {
+            "$ref": "#/components/parameters/userMri"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stream was successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thread"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/streams/{streamName}/messages": {
+      "get": {
+        "tags": [
+          "Streams"
+        ],
+        "description": "Request to get a page of messages. If personal user stream does not exist, it will be created. For Teams users the request will fail on MFE.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/startTime"
+          },
+          {
+            "$ref": "#/components/parameters/syncState"
+          },
+          {
+            "$ref": "#/components/parameters/startId"
+          },
+          {
+            "$ref": "#/components/parameters/endId"
+          },
+          {
+            "$ref": "#/components/parameters/sortOrderAsc"
+          },
+          {
+            "$ref": "#/components/parameters/queryOnProperty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages were successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMessagesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Streams"
+        ],
+        "description": "Request to create a new message. If personal user stream does not exist, it will be created. For Teams users the request will fail on MFE.",
+        "requestBody": {
+          "description": "Message to be sent",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Message was successfully created"
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/streamName"
+        },
+        {
+          "$ref": "#/components/parameters/userMri"
+        }
+      ]
+    },
+    "/v1/users/{userMri}/streams/{streamName}/messages/{messageId}": {
+      "put": {
+        "tags": [
+          "Streams"
+        ],
+        "description": "Request to update a message. For Teams users the request will fail on MFE.",
+        "requestBody": {
+          "description": "Update for message",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message was successfully updated"
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided streamName was not found or provided messageId was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Streams"
+        ],
+        "description": "Request to hard delete a message. Soft delete is not supported for streams. For Teams users the request will fail on MFE.",
+        "responses": {
+          "200": {
+            "description": "Message was successfully hard deleted"
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Provided streamName was not found or provided messageId was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed because of optimistic concurrency on thread. Client can retry with exponential backoff.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/streamName"
+        },
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/messageId"
+        }
+      ]
+    },
+    "/v2/users/{userMri}/endpoints/{endpointGuid}": {
+      "get": {
+        "tags": [
+          "Endpoint operations"
+        ],
+        "description": "Get endpoint information",
+        "responses": {
+          "200": {
+            "description": "Endpoint found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndpointInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Endpoint not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Endpoint operations"
+        ],
+        "description": "Create new or update existing endpoint",
+        "requestBody": {
+          "description": "The endpoint input.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EndpointInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Endpoint was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndpointInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Endpoint operations"
+        ],
+        "description": "Delete endpoint",
+        "responses": {
+          "200": {
+            "description": "Endpoint was successfully deleted"
+          },
+          "400": {
+            "description": "Validation of input parameters failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed for the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Endpoint not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/endpointGuid"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/threads/{threadId}/integrations": {
+      "get": {
+        "tags": [
+          "Integration management"
+        ],
+        "description": "Request to get integrations from thread",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integrations were succesfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetIntegrationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Resource for provided thread Id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Integration management"
+        ],
+        "description": "Request to add a new integration",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "requestBody": {
+          "description": "The integration payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostIntegrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Integration was succesfully saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostIntegrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Resource for provided thread Id was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/threads/{threadId}/integrations/{integrationId}": {
+      "delete": {
+        "tags": [
+          "Integration management"
+        ],
+        "description": "Request to delete an integration",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/integrationId"
+          },
+          {
+            "$ref": "#/components/parameters/Skypetoken"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integration was successfully deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Resource for provided integration Id or thread Id were not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/ii/threads/{threadId}/integrations/{integrationFullId}/{dataSchema}/{token}": {
+      "post": {
+        "tags": [
+          "Integration messaging"
+        ],
+        "description": "Request to post a message as an integration",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/threadId"
+          },
+          {
+            "$ref": "#/components/parameters/integrationFullId"
+          },
+          {
+            "$ref": "#/components/parameters/dataSchema"
+          },
+          {
+            "$ref": "#/components/parameters/token"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          },
+          {
+            "$ref": "#/components/parameters/MsProduct"
+          }
+        ],
+        "requestBody": {
+          "description": "The integration message payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostIntegrationMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Integration message was succesfully saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostIntegrationMessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User provided incorrect input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Resource for provided integration Mri or thread Id were not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/users/{userMri}/properties": {
+      "get": {
+        "tags": [
+          "User properties management"
+        ],
+        "description": "Request to get all the user properties, eventually to get a specific user property if propertyName URL attribute is provided.",
+        "responses": {
+          "200": {
+            "description": "User properties request was handled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserPropertiesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Client provided invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User properties management"
+        ],
+        "description": "Request to update a user property. The propertyName query attribute must match to the property name in the request body if provided.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutUserPropertiesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User property update was successful"
+          },
+          "400": {
+            "description": "Client provided invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/userMri"
+        },
+        {
+          "$ref": "#/components/parameters/OnBehalfOf"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        },
+        {
+          "$ref": "#/components/parameters/userPropertyName"
+        }
+      ]
+    },
+    "/v1/import/threads": {
+      "post": {
+        "tags": [
+          "Import operations"
+        ],
+        "description": "Request to import a thread",
+        "requestBody": {
+          "description": "Thread to be imported",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportThreadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Thread was successfully imported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportThreadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/import/threads/{threadId}/finalize": {
+      "post": {
+        "tags": [
+          "Import operations"
+        ],
+        "description": "Request to complete the import operation on a thread. This will update the import state of the thread resulting in the completion of import.",
+        "responses": {
+          "200": {
+            "description": "Thread import successfully finalized"
+          },
+          "307": {
+            "description": "Requested resource belongs to another deployment-group"
+          },
+          "400": {
+            "description": "Validation of request content failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "description": "Thread with input threadId was not found in store."
+          },
+          "412": {
+            "description": "Precondition failed because of optimistic concurrency on thread. Client can retry with exponential backoff."
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/keepRosterRestrictions"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        },
+        {
+          "$ref": "#/components/parameters/MsProduct"
+        }
+      ]
+    },
+    "/v1/import/threads/{threadId}/messages": {
+      "post": {
+        "tags": [
+          "Import operations"
+        ],
+        "description": "Request to import messages to a thread",
+        "requestBody": {
+          "description": "Input parameters required to process the request.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "All messages was successfully imported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportMessageResponse"
+                }
+              }
+            }
+          },
+          "207": {
+            "description": "Some messages were not imported successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportMessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request may be missing or malformed messageId, clientMessageId, rosterVersion, or content. Ensure that the content matches the ContentType and MessageType. If PostSequenceId, PostId must be set to a valid messageId corresponding to a message with IsPost == true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/threadId"
+        },
+        {
+          "$ref": "#/components/parameters/Skypetoken"
+        },
+        {
+          "$ref": "#/components/parameters/MSCV"
+        }
+      ]
+    },
+    "/v1/migration/jobs": {
+      "post": {
+        "tags": [
+          "Migration"
+        ],
+        "description": "Creates a new asynchronous job for migrating or cleaning up a resource specified in the input.",
+        "requestBody": {
+          "description": "Input needed to create a migration job.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationJobsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The job instance was successfully crated. The processing of the migration action itself will happen asynchronously. When the asynchronos job is completed, the callback is called with a MigrationJobsResponse object instance to provide completion status of the job.",
+            "headers": {
+              "Location": {
+                "$ref": "#/components/headers/Location"
+              }
+            }
+          },
+          "400": {
+            "description": "The input contains validation error(s).",
+            "content": {
+              "application/json": { }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "callbacks": {
+          "MigrationJobCompleted": {
+            "{$request.body#/callbackUrl}": {
+              "post": {
+                "description": "The callback url based post request to provide job status.",
+                "requestBody": {
+                  "description": "The migration job status.",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/MigrationJobStatus"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "The migeration job status was accepted."
+                  },
+                  "400": {
+                    "description": "The input contains validation error(s).",
+                    "content": {
+                      "application/json": { }
+                    }
+                  },
+                  "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                  },
+                  "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                  },
+                  "429": {
+                    "$ref": "#/components/responses/Throttled"
+                  },
+                  "500": {
+                    "$ref": "#/components/responses/InternalServerError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/MSCV"
+        }
+      ]
+    },
+    "/v1/migration/threads": {
+      "get": {
+        "tags": [
+          "Migration"
+        ],
+        "description": "Gets the list of threads owned by a tenant or user or parent thread id.  One of these filters is required in the query parameters section. These filters cannot be combined. i.e. only one filter can be provided at a time.",
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "query",
+            "description": "The tenant id to filter the threads. The threads returned are threads created by the tenant.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "The user id to filter the threads. The threads returned are created or owned by the user.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentThreadId",
+            "in": "query",
+            "description": "The parent thread id to filter the threads. The threads returned are owned descendents of the parent thread.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/cursor"
+          },
+          {
+            "$ref": "#/components/parameters/pageSize"
+          },
+          {
+            "$ref": "#/components/parameters/MSCV"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page containing a list of thread ids retrieved for the requested context.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrationThreadsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The query parameters contain validation error(s).",
+            "content": {
+              "application/json": { }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/Throttled"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LocationType": {
+        "type": "string"
+      },
+      "DiagnosticResponseBody": {
+        "required": [
+          "resource"
+        ],
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "object",
+            "description": "The scrubbed object of diagnostic resource."
+          }
+        },
+        "description": "Response schema for diagnostic API."
+      },
+      "GetAnnotationsResponse": {
+        "type": "object",
+        "properties": {
+          "annotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotation"
+            }
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "cursor": {
+            "type": "string"
+          }
+        }
+      },
+      "Annotation": {
+        "type": "object",
+        "properties": {
+          "mri": {
+            "type": "string"
+          },
+          "time": {
+            "type": "number"
+          },
+          "value": {
+            "type": "string"
+          },
+          "annotationtype": {
+            "type": "string"
+          }
+        }
+      },
+      "GetConversationsResponse": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Conversation"
+            }
+          },
+          "_metadata": {
+            "$ref": "#/components/schemas/GetConversationsResponseMetadata"
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "threadProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "memberProperties": {
+            "$ref": "#/components/schemas/ConversationMemberProperties"
+          },
+          "lastMessage": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "messages": {
+            "type": "string"
+          },
+          "lastUpdatedMessageId": {
+            "type": "integer",
+            "nullable": true
+          },
+          "lastUpdatedMessageVersion": {
+            "type": "integer",
+            "nullable": true
+          },
+          "targetLink": {
+            "type": "string"
+          }
+        }
+      },
+      "ConversationMemberProperties": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "isReader": {
+            "type": "boolean"
+          },
+          "memberExpirationTime": {
+            "type": "integer"
+          },
+          "isModerator": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "relationshipState": {
+            "$ref": "#/components/schemas/RosterMemberRelationshipState"
+          }
+        }
+      },
+      "GetConversationsResponseMetadata": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer"
+          },
+          "forwardLink": {
+            "type": "string"
+          },
+          "backwardLink": {
+            "type": "string"
+          },
+          "syncState": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateConversationProperty": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "GetMessagesResponse": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "_metadata": {
+            "$ref": "#/components/schemas/MessagesResponseMetadata"
+          }
+        }
+      },
+      "GetMembersResponse": {
+        "required": [
+          "members",
+          "totalMemberCount",
+          "rosterVersion"
+        ],
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          },
+          "totalMemberCount": {
+            "type": "integer",
+            "description": "Total number of members in the thread's roster"
+          },
+          "rosterVersion": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "nextLink": {
+            "type": "string"
+          }
+        }
+      },
+      "GetMembersByIdResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Member"
+        }
+      },
+      "MessagesResponseMetadata": {
+        "type": "object",
+        "properties": {
+          "backwardLink": {
+            "type": "string"
+          },
+          "syncState": {
+            "type": "string"
+          },
+          "lastCompleteSegmentStartTime": {
+            "type": "integer"
+          },
+          "lastCompleteSegmentEndTime": {
+            "type": "integer"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sequenceId": {
+            "type": "integer"
+          },
+          "clientmessageid": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "origincontextid": {
+            "type": "string"
+          },
+          "skypeeditedid": {
+            "type": "string"
+          },
+          "skypeeditoffset": {
+            "type": "integer",
+            "nullable": true
+          },
+          "conversationid": {
+            "type": "string"
+          },
+          "conversationLink": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "messagetype": {
+            "type": "string"
+          },
+          "contenttype": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "amsreferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skypeguid": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "imdisplayname": {
+            "type": "string"
+          },
+          "s2spartnername": {
+            "type": "string"
+          },
+          "composetime": {
+            "type": "string"
+          },
+          "originalarrivaltime": {
+            "type": "string"
+          },
+          "timeToLive": {
+            "type": "string",
+            "description": "Valid value is a time period encoded in ISO8601 format in the interval from 0 to 28 exclusive. The message will expire (will be hard deleted) after TTL. The usage is restricted to personal user stream 48:generic and other usage is invalid.",
+            "format": "duration",
+            "example": "P7D"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "annotationsSummary": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AnnotationSummaryItem"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "AnnotationSummaryItem": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number"
+        }
+      },
+      "Member": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of member, e.g. \"ThreadMember\""
+          },
+          "userLink": {
+            "type": "string",
+            "description": "Link to get the user, e.g. \"https://noam-canary.msgapi.teams.microsoft.com/v1/users/8:userMri\""
+          },
+          "role": {
+            "type": "string"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Either KickMember or EditMsg or both"
+          },
+          "linkedMri": {
+            "type": "string"
+          },
+          "cid": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "userTile": {
+            "type": "string"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "isFollowing": {
+            "type": "boolean"
+          },
+          "isFavorite": {
+            "type": "boolean"
+          },
+          "isPinned": {
+            "type": "boolean"
+          },
+          "isModerator": {
+            "type": "boolean"
+          },
+          "isReader": {
+            "type": "boolean"
+          },
+          "shareHistoryTime": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "rangeStart": {
+            "type": "integer",
+            "description": "Unix Timestamp (in milliseconds) of the start of message range that the roster member has access to.",
+            "format": "uint64"
+          },
+          "rangeEnd": {
+            "type": "integer",
+            "description": "Unix Timestamp (in milliseconds) of the end of message range that the roster member has access to.",
+            "format": "uint64"
+          },
+          "memberExpirationTime": {
+            "type": "integer",
+            "description": "Set for temp-join members only.",
+            "format": "uint64"
+          },
+          "expirationTimeInSeconds": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "channelOnlyMember": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SendMessageRequest": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "$ref": "#/components/schemas/MessageProperties"
+          },
+          "amsreferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clientmessageid": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content. The value is sanitized if 'contenttype' is RichText/Html."
+          },
+          "contenttype": {
+            "type": "string"
+          },
+          "imdisplayname": {
+            "type": "string"
+          },
+          "messagetype": {
+            "type": "string"
+          },
+          "skypeguid": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateMessageRequest": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "$ref": "#/components/schemas/MessageProperties"
+          },
+          "amsreferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clientmessageid": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content. The value is sanitized if 'contenttype' is RichText/Html."
+          },
+          "imdisplayname": {
+            "type": "string"
+          },
+          "messagetype": {
+            "type": "string"
+          },
+          "skypeguid": {
+            "type": "string"
+          },
+          "timeToLive": {
+            "type": "string",
+            "description": "Valid value is a time period encoded in ISO8601 format in the interval from 0 to 28 exclusive. The message will expire (will be hard deleted) after TTL. The usage is restricted to personal user stream 48:generic and other usage is invalid.",
+            "format": "duration",
+            "example": "P7D"
+          }
+        }
+      },
+      "MessageProperties": {
+        "type": "object",
+        "properties": {
+          "mentions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AtMention"
+            }
+          },
+          "cards": {
+            "type": "object",
+            "description": "Message cards. Card value is sanitized."
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        },
+        "description": "Map of message properties. Property values are not sanitized unless it is explicitly mentioned for a property."
+      },
+      "AtMention": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string"
+          },
+          "itemid": {
+            "type": "integer"
+          },
+          "mri": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "mentionType": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateThreadRequest": {
+        "type": "object",
+        "properties": {
+          "foreignName": {
+            "type": "string"
+          },
+          "flighted": {
+            "type": "boolean"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateThreadMember"
+            }
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThreadDescriptionProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadJoiningEnabledProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTypeProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTemplateTypeProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTopicProperty"
+              },
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/IsStickyThreadProperty"
+                  },
+                  {
+                    "$ref": "#/components/schemas/UniqueRosterThreadProperty"
+                  }
+                ]
+              }
+            ],
+            "description": "Map of thread properties used during thread creation. Thread properties values are not sanitized.",
+            "example": {
+              "description": "string",
+              "joiningenabled": "string",
+              "threadType": "Chat",
+              "templateType": "Chat",
+              "topic": "string",
+              "isStickyThread": true
+            }
+          }
+        }
+      },
+      "ImportThreadRequest": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThreadDescriptionProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadJoiningEnabledProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTopicProperty"
+              },
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/IsStickyThreadProperty"
+                  },
+                  {
+                    "$ref": "#/components/schemas/UniqueRosterThreadProperty"
+                  }
+                ]
+              }
+            ],
+            "description": "Map of thread properties used during thread creation. Thread properties values are not sanitized.",
+            "example": {
+              "description": "string",
+              "joiningenabled": "string",
+              "topic": "string",
+              "isStickyThread": true
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Thread creation time. ISO UTC date time string",
+            "format": "date-time"
+          },
+          "aadGroupId": {
+            "type": "string",
+            "description": "Modern group id. Is exclusive of consumerGroupId property and it cannot be changed after the value is set",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "description": "Tenant identifier",
+            "format": "uuid"
+          },
+          "threadType": {
+            "$ref": "#/components/schemas/ThreadType"
+          },
+          "templateType": {
+            "$ref": "#/components/schemas/TemplateType"
+          }
+        },
+        "description": "Request body for importing a thread to IC3"
+      },
+      "ImportThreadResponse": {
+        "required": [
+          "threadId",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string",
+            "description": "Id of the created thread"
+          },
+          "version": {
+            "type": "string",
+            "description": "version number of the thread (for optimistic-concurrency control/if-match header and Etags)"
+          }
+        },
+        "description": "Response of server generated fields when importing a thread"
+      },
+      "CreateThreadMember": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ThreadMemberRole"
+          },
+          "expiration": {
+            "$ref": "#/components/schemas/UnixEpochTime"
+          },
+          "isFollowing": {
+            "type": "boolean"
+          },
+          "isReader": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isModerator": {
+            "type": "boolean",
+            "description": "Is the member a moderator"
+          },
+          "hidden": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "shareHistoryTime": {
+            "$ref": "#/components/schemas/UnixEpochTime"
+          }
+        }
+      },
+      "UpsertThreadMembersRequest": {
+        "required": [
+          "members"
+        ],
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpsertThreadMemberInfo"
+            }
+          }
+        },
+        "description": "Request schema for adding or updating details of a list of members"
+      },
+      "DeleteThreadMembersRequest": {
+        "required": [
+          "members"
+        ],
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/Mri"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteThreadMembersPartialResponse": {
+        "type": "object",
+        "properties": {
+          "multipleStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndividualStatusResponse"
+            }
+          }
+        }
+      },
+      "Thread": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "type": {
+            "type": "string"
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ThreadDescriptionProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadJoiningEnabledProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTypeProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTemplateTypeProperty"
+              },
+              {
+                "$ref": "#/components/schemas/ThreadTopicProperty"
+              }
+            ],
+            "description": "Map of thread properties used during during getting of a thread. Thread properties values are not sanitized.",
+            "example": {
+              "description": "string",
+              "joiningenabled": "string",
+              "threadType": "Chat",
+              "templateType": "Chat",
+              "topic": "string"
+            }
+          },
+          "botsSettings": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ThreadBotSetting"
+            }
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ThreadMember"
+            }
+          },
+          "version": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "messages": {
+            "type": "string"
+          },
+          "rosterVersion": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "rosterSummary": {
+            "$ref": "#/components/schemas/ThreadRosterSummary"
+          }
+        }
+      },
+      "ThreadRosterSummary": {
+        "required": [
+          "memberCount",
+          "botCount",
+          "readerCount",
+          "roleCounts"
+        ],
+        "type": "object",
+        "properties": {
+          "memberCount": {
+            "type": "number"
+          },
+          "botCount": {
+            "type": "number"
+          },
+          "readerCount": {
+            "type": "number"
+          },
+          "roleCounts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "example": {
+              "User": 7,
+              "Admin": 1
+            }
+          }
+        }
+      },
+      "FakeThread": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "type": {
+            "enum": [
+              "Thread"
+            ],
+            "type": "string",
+            "description": "Value is always 'Thread'"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "capabilities": {
+                "maxItems": 0,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "members": {
+            "maxItems": 0,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ThreadMember"
+            },
+            "description": "List of members is always empty"
+          },
+          "version": {
+            "enum": [
+              0
+            ],
+            "type": "integer",
+            "description": "Value is always 0",
+            "format": "uint64"
+          },
+          "messages": {
+            "type": "string"
+          }
+        }
+      },
+      "GetThreadsResponse": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/Thread"
+            },
+            {
+              "$ref": "#/components/schemas/FakeThread"
+            }
+          ]
+        },
+        "description": "An array of thread objects. It is guaranteed, that for each requested thread id there is a corresponded thread object in response. If MFE is unable to obtain some thread (e.g. if corresponding thread id is invalid, error is occurred, etc), then MFE provides fake thread object."
+      },
+      "PutThreadMemberRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/ThreadMemberRole"
+          },
+          "expiration": {
+            "$ref": "#/components/schemas/UnixEpochTime"
+          },
+          "isFollowing": {
+            "type": "boolean",
+            "description": "Is the member following this channel"
+          },
+          "isReader": {
+            "type": "boolean",
+            "description": "Is the member only a reader in the team (the member is muted)"
+          },
+          "friendlyName": {
+            "type": "string",
+            "description": "Used in the anonymous joining scenario"
+          },
+          "isModerator": {
+            "type": "boolean"
+          }
+        },
+        "description": "Request schema for updating a member details."
+      },
+      "ThreadMember": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "type": {
+            "type": "string"
+          },
+          "userLink": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ThreadMemberRole"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "linkedMri": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "cid": {
+            "type": "string"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "isFollowing": {
+            "type": "boolean"
+          },
+          "shareHistoryTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "rangeStart": {
+            "type": "integer",
+            "description": "Unix Timestamp (in milliseconds) of the start of message range that the roster member has access to.",
+            "format": "uint64"
+          },
+          "rangeEnd": {
+            "type": "integer",
+            "description": "Unix Timestamp (in milliseconds) of the end of message range that the roster member has access to.",
+            "format": "uint64"
+          },
+          "memberExpirationTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "expirationTimeInSeconds": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "hidden": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ThreadBotSetting": {
+        "type": "object",
+        "properties": {
+          "messagingMode": {
+            "enum": [
+              "At",
+              "All"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "UpsertThreadMemberInfo": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ThreadMemberRole"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "shareHistoryTime": {
+            "$ref": "#/components/schemas/UnixEpochTime"
+          },
+          "expiration": {
+            "$ref": "#/components/schemas/UnixEpochTime"
+          },
+          "isModerator": {
+            "type": "boolean"
+          },
+          "isReader": {
+            "type": "boolean",
+            "description": "Is the member only a reader in the team (the member is muted)"
+          },
+          "channelOnlyMember": {
+            "type": "boolean",
+            "description": "Whether or not the member is a channel only member. This can only be set on a substrate backed channel by specific S2S partners."
+          }
+        }
+      },
+      "GetThreadPropertyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "type": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "integer",
+            "format": "uint64"
+          }
+        }
+      },
+      "GetThreadLocationResponse": {
+        "required": [
+          "geo",
+          "env",
+          "tenantId"
+        ],
+        "type": "object",
+        "properties": {
+          "geo": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string"
+          }
+        }
+      },
+      "UpsertThreadMembersResponse": {
+        "type": "object",
+        "properties": {
+          "multipleStatus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndividualStatusResponse"
+            }
+          }
+        }
+      },
+      "EndpointInput": {
+        "required": [
+          "endpointFeatures",
+          "subscriptions"
+        ],
+        "type": "object",
+        "properties": {
+          "endpointFeatures": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndpointSubscriptionInput"
+            }
+          }
+        }
+      },
+      "EndpointSubscriptionInput": {
+        "required": [
+          "channelType",
+          "interestedResources"
+        ],
+        "type": "object",
+        "properties": {
+          "channelType": {
+            "enum": [
+              "HttpLongPoll",
+              "PushNotification"
+            ],
+            "type": "string"
+          },
+          "interestedResources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "EndpointInfo": {
+        "required": [
+          "id",
+          "endpointFeatures",
+          "subscriptions",
+          "isActiveUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "endpointFeatures": {
+            "type": "string"
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EndpointSubscriptionInfo"
+            }
+          },
+          "isActiveUrl": {
+            "type": "string",
+            "description": "URL that should be used to update active timeout for the given endpoint",
+            "format": "uri"
+          },
+          "longPollActiveTimeoutSupport": {
+            "type": "boolean",
+            "description": "If true client can leverage long poll to post active status instead of making separate post active requests"
+          }
+        }
+      },
+      "EndpointSubscriptionInfo": {
+        "required": [
+          "channelType",
+          "interestedResources"
+        ],
+        "type": "object",
+        "properties": {
+          "channelType": {
+            "enum": [
+              "HttpLongPoll",
+              "PushNotification"
+            ],
+            "type": "string"
+          },
+          "interestedResources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "longPollUrl": {
+            "type": "string",
+            "description": "URL to which long poll request should be issued"
+          }
+        }
+      },
+      "IndividualStatusResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/DomainStatusCode"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "$ref": "#/components/schemas/DomainStatusCode"
+          },
+          "message": {
+            "type": "string",
+            "description": "Reason of failure"
+          }
+        }
+      },
+      "DomainStatusCode": {
+        "enum": [
+          0,
+          1,
+          201,
+          206,
+          209,
+          404,
+          500,
+          729,
+          911,
+          1400
+        ],
+        "type": "integer",
+        "description": "Possible values\n  * 0: - Operation was successful\n  * 1: - Operation failed\n  * 201: - Invalid parameter\n  * 206: - Acl check failed\n  * 209: - Insufficient privileges\n  * 404: - Not found\n  * 500: - Internal server error\n  * 729: - Endpoint not found\n  * 911: - Authentication failed\n  * 1400: - Reciever's phone number is already assigned to Teams user in the same tenant as sender\n"
+      },
+      "Mri": {
+        "type": "string",
+        "description": "Resource identifier in format <resource_type>:<resource_id>"
+      },
+      "ThreadMemberRole": {
+        "enum": [
+          "None",
+          "Admin",
+          "User",
+          "Guest",
+          "Anonymous",
+          "Owner"
+        ],
+        "type": "string"
+      },
+      "ThreadDescriptionProperty": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Free text to elaborate the thread topic"
+          }
+        }
+      },
+      "ThreadJoiningEnabledProperty": {
+        "type": "object",
+        "properties": {
+          "joiningenabled": {
+            "type": "string",
+            "description": "Determines if user is allowed to self join the thread"
+          }
+        }
+      },
+      "ThreadTypeProperty": {
+        "type": "object",
+        "properties": {
+          "threadType": {
+            "$ref": "#/components/schemas/ThreadType"
+          }
+        }
+      },
+      "ThreadType": {
+        "enum": [
+          "Chat",
+          "Meeting",
+          "Space",
+          "Topic",
+          "PhoneChat"
+        ],
+        "type": "string"
+      },
+      "ThreadTemplateTypeProperty": {
+        "type": "object",
+        "properties": {
+          "templateType": {
+            "$ref": "#/components/schemas/TemplateType"
+          }
+        }
+      },
+      "TemplateType": {
+        "enum": [
+          "Chat",
+          "Meeting",
+          "Space",
+          "Topic",
+          "PhoneChat",
+          "ClosedChat",
+          "OpenChat"
+        ],
+        "type": "string"
+      },
+      "ThreadTopicProperty": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "Free text to name the thread"
+          }
+        }
+      },
+      "IsStickyThreadProperty": {
+        "type": "object",
+        "properties": {
+          "isStickyThread": {
+            "type": "boolean",
+            "description": "Flag if a thread is sticky - sticky thread has immutable roster, members cannot be added or removed.\nThreadId for a sticky thread is stable - returns always the same threadId for a given roster.\nAt the moment we only support sticky threads with two members.\n"
+          }
+        }
+      },
+      "UniqueRosterThreadProperty": {
+        "type": "object",
+        "properties": {
+          "uniquerosterthread": {
+            "type": "boolean",
+            "description": "This flag is deprecated and should not be used. Use \"isStickyThread\" instead. This flag triggers generation of threadId with special suffix."
+          }
+        }
+      },
+      "UnixEpochTime": {
+        "type": "integer",
+        "description": "Timestamp representing in seconds since January 1st, 1970 UTC"
+      },
+      "PostIntegrationRequest": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Integration display name"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Integration avatar url"
+          },
+          "dataSchema": {
+            "type": "string",
+            "description": "The integration data schema. Most of the times, the value is \"Skype\""
+          },
+          "templateName": {
+            "type": "string",
+            "description": "The integration template name"
+          },
+          "integrationType": {
+            "type": "string",
+            "description": "The integration type, can be incomming or command"
+          },
+          "providerGuid": {
+            "type": "string",
+            "description": "The integration provider identifier, used to identify the connector type"
+          }
+        }
+      },
+      "PostIntegrationResponse": {
+        "type": "object",
+        "properties": {
+          "integrationId": {
+            "type": "string",
+            "description": "Integration identifier"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Integration display name"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Integration avatar url"
+          },
+          "dataSchema": {
+            "type": "string",
+            "description": "The integration data schema. Most of the times the value is \"Skype\""
+          },
+          "templateName": {
+            "type": "string",
+            "description": "The integration template name"
+          },
+          "integrationType": {
+            "type": "string",
+            "description": "The integration type, can be incomming or command"
+          },
+          "providerGuid": {
+            "type": "string",
+            "description": "The integration provider identifier, used to identify the connector type"
+          },
+          "incomingUrl": {
+            "type": "string",
+            "description": "The url used by integration to post messages"
+          }
+        }
+      },
+      "GetIntegrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "An array of integrations in string format"
+      },
+      "PostIntegrationMessageRequest": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The content of the integration message"
+          },
+          "messagetype": {
+            "type": "string",
+            "description": "Integration message type"
+          },
+          "contenttype": {
+            "type": "string",
+            "description": "Integration content type"
+          },
+          "imdisplayname": {
+            "type": "string",
+            "description": "The display name for the integration"
+          },
+          "meta": {
+            "type": "string",
+            "description": "Stores additional connector metadata"
+          }
+        }
+      },
+      "PostIntegrationMessageResponse": {
+        "type": "object",
+        "properties": {
+          "OriginalArrivalTime": {
+            "type": "string",
+            "description": "The arrival time for the integration message"
+          }
+        }
+      },
+      "GetThreadPermissionsResponse": {
+        "type": "object"
+      },
+      "GetThreadConsumptionHorizonsResponse": {
+        "required": [
+          "id",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id of the consumption horizons object. Currently, it is equal to thread id."
+          },
+          "version": {
+            "type": "string",
+            "description": "version of the consumption horizons object.Currently, it is time in milliseconds from epoch as string"
+          },
+          "consumptionhorizons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConsumptionHorizonView"
+            }
+          }
+        }
+      },
+      "ConsumptionHorizonView": {
+        "required": [
+          "id",
+          "consumptionhorizon"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "roster member id"
+          },
+          "consumptionhorizon": {
+            "type": "string",
+            "description": "semicolon separated string with consumption horizon components: message id;client read timestamp in milliseconds from epoch;client message id"
+          },
+          "messageVisibilityTime": {
+            "type": "integer",
+            "description": "message visibility time in milliseconds from epoch",
+            "format": "int64",
+            "nullable": true
+          }
+        }
+      },
+      "GetRosterChangelogResponse": {
+        "required": [
+          "entries"
+        ],
+        "type": "object",
+        "properties": {
+          "nextLink": {
+            "type": "string",
+            "description": "Url to fetch the next set of paginated results"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RosterChangelogEntry"
+            }
+          }
+        }
+      },
+      "RosterChangelogEntry": {
+        "required": [
+          "rosterVersion",
+          "initiatorId"
+        ],
+        "type": "object",
+        "properties": {
+          "rosterVersion": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "initiatorId": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "membersAdded": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RosterChangelogMember"
+            }
+          },
+          "membersUpdated": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RosterChangelogMember"
+            }
+          },
+          "membersRemoved": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RosterChangelogMember"
+            }
+          }
+        }
+      },
+      "RosterChangelogMember": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ThreadMemberRole"
+          },
+          "tenantId": {
+            "type": "string"
+          },
+          "isFollowing": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RelationshipUpdate": {
+        "required": [
+          "target",
+          "isContact",
+          "isBlocked",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "target": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "isContact": {
+            "type": "boolean",
+            "description": "true if initiator user has target user on the contact list, false otherwise"
+          },
+          "isBlocked": {
+            "type": "boolean",
+            "description": "true if initiator user has blocked the target user, false otherwise"
+          },
+          "version": {
+            "type": "integer",
+            "description": "relationship state update event version",
+            "format": "int64"
+          }
+        }
+      },
+      "ClientInfoContent": {
+        "type": "string",
+        "description": "semicolon-separated set of client properties in form name=value pairs while there aren't any mandatory parameters which must be always present",
+        "example": "os=Windows; osVer=6.66; proc=Win32; deviceType=1; clientName=swx-skype.com; clientVer=908/1.50.53; productContext=TFL"
+      },
+      "RosterMemberRelationshipState": {
+        "type": "object",
+        "properties": {
+          "inQuarantine": {
+            "type": "boolean",
+            "description": "true if initiator user set quarantine mode toward the target user, false otherwise",
+            "nullable": true
+          },
+          "quarantineCounter": {
+            "type": "integer",
+            "description": "number of messages the roster member has sent to 1:1 thread while the other roster member is in the quarantine mode",
+            "nullable": true
+          },
+          "blockTime": {
+            "type": "string",
+            "description": "timestamp in ISO8601 format when the roster member has switched into the blocked state. Not set when the roster member is not in the blocked state",
+            "format": "date-time"
+          }
+        }
+      },
+      "GetThreadSnapshotsResponseBody": {
+        "required": [
+          "snapshots"
+        ],
+        "type": "object",
+        "properties": {
+          "snapshots": {
+            "type": "array",
+            "items": {
+              "required": [
+                "userId"
+              ],
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "description": "The ID of the user that owns the snapshot"
+                },
+                "rangeStart": {
+                  "type": "integer",
+                  "description": "Unix Timestamp (in milliseconds) of the start of message range that the snapshot has access to.",
+                  "format": "uint64"
+                },
+                "rangeEnd": {
+                  "type": "integer",
+                  "description": "Unix Timestamp (in milliseconds) of the end of message range that the snapshot has access to.",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetUserPropertiesResponse": {
+        "required": [
+          "primaryMemberName"
+        ],
+        "type": "object",
+        "properties": {
+          "primaryMemberName": {
+            "type": "string",
+            "description": "user id without the mri type prefix"
+          }
+        },
+        "additionalProperties": {
+          "type": "object"
+        }
+      },
+      "PutUserPropertiesRequest": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "description": "single name value pair of the property being updated. If missing, it is equivalent to setting the property value to null"
+        }
+      },
+      "ImportMessageRequest": {
+        "required": [
+          "messages"
+        ],
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportMessage"
+            }
+          }
+        },
+        "description": "Request body for importing messages to IC3"
+      },
+      "ImportMessageView": {
+        "required": [
+          "messageId",
+          "sequenceId",
+          "threadId",
+          "clientMessageId",
+          "parentMessageId",
+          "content",
+          "contentType",
+          "messageType",
+          "messageSubType",
+          "properties",
+          "sender",
+          "imDisplayName",
+          "rosterId",
+          "originalArrivalTime",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "integer",
+            "description": "Unix timestamp in milliseconds of when the message was originally sent",
+            "format": "uint64"
+          },
+          "sequenceId": {
+            "type": "integer",
+            "description": "Epoch timestamp of when the message was imported.",
+            "format": "uint64"
+          },
+          "threadId": {
+            "$ref": "#/components/schemas/Mri"
+          },
+          "clientMessageId": {
+            "type": "string",
+            "description": "Id for message from client."
+          },
+          "parentMessageId": {
+            "type": "string",
+            "description": "Message Id of the PostMessage"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content"
+          },
+          "contentType": {
+            "type": "string",
+            "description": "type of the message content"
+          },
+          "messageType": {
+            "type": "string",
+            "description": "type of the message. (i.e. \"Text\")"
+          },
+          "messageSubType": {
+            "type": "string",
+            "description": "subtype of the message (i.e. \"RichText\")"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "sender": {
+            "type": "string",
+            "description": "the MRI of the sender of the message."
+          },
+          "imDisplayName": {
+            "type": "string",
+            "description": "the display name of the sender."
+          },
+          "rosterId": {
+            "type": "string",
+            "description": "the id of the roster"
+          },
+          "originalArrivalTime": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "version": {
+            "type": "integer",
+            "format": "uint64"
+          }
+        },
+        "description": "Response view of an imported message"
+      },
+      "ImportMessage": {
+        "required": [
+          "sentTime",
+          "clientMessageId",
+          "sender",
+          "senderDisplayName",
+          "content",
+          "contentType",
+          "messageType",
+          "messageSubType"
+        ],
+        "type": "object",
+        "properties": {
+          "sentTime": {
+            "type": "integer",
+            "description": "Unix timestamp of when the message was originally sent",
+            "format": "uint64"
+          },
+          "clientMessageId": {
+            "type": "string",
+            "description": "Id for message from client. SIS has a dependency on this property such that two messages should not have the same Id for substrate ingestion to work correctly."
+          },
+          "sender": {
+            "type": "string",
+            "description": "the MRI of the sender of the message."
+          },
+          "imDisplayName": {
+            "type": "string",
+            "description": "the display name of the sender. Not required per PM discussion, displaying Unknown User in client is acceptable for cases where the SenderDisplayName is not set."
+          },
+          "content": {
+            "type": "string",
+            "description": "the content of the message."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "type of the message content"
+          },
+          "messageType": {
+            "type": "string",
+            "description": "type of the message. (i.e. \"Text\")"
+          },
+          "messageSubType": {
+            "type": "string",
+            "description": "subtype of the message (i.e. \"RichText\")"
+          },
+          "parentMessageId": {
+            "type": "integer",
+            "description": "the MessageId of the parent message of a reply chain.",
+            "format": "uint64"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        },
+        "description": "Contract for importing a thread message to IC3"
+      },
+      "ImportMessageResponse": {
+        "required": [
+          "messages",
+          "failedMessages"
+        ],
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportMessageView"
+            }
+          },
+          "failedMessages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportMessageErrorResponse"
+            }
+          }
+        },
+        "description": "Response of server generated fields when importing messages"
+      },
+      "ImportMessageErrorResponse": {
+        "required": [
+          "clientMessageId",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "clientMessageId": {
+            "type": "string",
+            "description": "Id for message from client."
+          },
+          "status": {
+            "$ref": "#/components/schemas/DomainStatusCode"
+          }
+        },
+        "description": "Message import failure details"
+      },
+      "MigrationJobsRequest": {
+        "required": [
+          "action",
+          "entityType",
+          "entityId",
+          "tenantId"
+        ],
+        "type": "object",
+        "properties": {
+          "action": {
+            "enum": [
+              "migration",
+              "cleanup"
+            ],
+            "type": "string",
+            "description": "Indicates if the job is to migrate resource to target geo or to clean up the resource from source or target geo. cleanup will succeed only if the specified geo is a secondary location."
+          },
+          "entityType": {
+            "enum": [
+              "thread",
+              "user"
+            ],
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string",
+            "description": "The unique id of the resource (e.g. thread id or user id) to migrate or cleanup."
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceGeo": {
+            "enum": [
+              "AMER",
+              "EMEA",
+              "APAC",
+              "UK",
+              "IN",
+              "CA",
+              "AU",
+              "JP",
+              "FR",
+              "KR",
+              "ZA",
+              "SG",
+              "CH",
+              "DE",
+              "NO"
+            ],
+            "type": "string",
+            "description": "The source geo for cleanup for resource. This must be provided when action is cleanup. When action is migration, sourceGeo is optional."
+          },
+          "targetGeo": {
+            "enum": [
+              "AMER",
+              "EMEA",
+              "APAC",
+              "UK",
+              "IN",
+              "CA",
+              "AU",
+              "JP",
+              "FR",
+              "KR",
+              "ZA",
+              "SG",
+              "CH",
+              "DE",
+              "NO"
+            ],
+            "type": "string",
+            "description": "The target geo for the migration. This must be provided when action is migration."
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "The callback uri that will be called with a post message when the asynchrnous operation is completed. The body of the post message will include the status of the job.",
+            "format": "uri",
+            "example": "https://myserver.com/v1/migration/jobcompleted"
+          }
+        },
+        "description": "The details for the creation of a migration job. The request indicates the resource to be migrated or cleaned up, the tenant id, the source or target geo to be used, and a callback for reporting the result when the asynchronous processing is completed."
+      },
+      "MigrationThreadsResponse": {
+        "required": [
+          "threads"
+        ],
+        "type": "object",
+        "properties": {
+          "threads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MigrationThreadView"
+            }
+          },
+          "cursor": {
+            "type": "string",
+            "description": "An opaque string that can be used by the client in the next request's query parameter to fetch more items. If this is missing, the client should stop fetching items."
+          }
+        },
+        "description": "The list of thread ids for the given tenant or user or parent thread id in query parameter. The cursor, if present, can be used to fetch more threads. If the cursor is provided in the query parameter, the other filters should not be provided."
+      },
+      "MigrationThreadView": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the thread."
+          }
+        },
+        "description": "The details of a thread returned for migration purpose."
+      },
+      "MigrationJobStatus": {
+        "required": [
+          "jobId",
+          "action",
+          "entityType",
+          "entityId",
+          "createdAt",
+          "state",
+          "reason",
+          "selfLink"
+        ],
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "action": {
+            "enum": [
+              "migration",
+              "cleanup"
+            ],
+            "type": "string"
+          },
+          "entityType": {
+            "enum": [
+              "thread",
+              "user"
+            ],
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "Queued",
+              "InProgress",
+              "Succeeded",
+              "Failed"
+            ],
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "description": "A human readable reason for the state. e.g. state = Succeeded, reason = NotFound or state = Failed, reason=TenantNotOwner"
+          }
+        },
+        "description": "The status of a migration job. This is used as the content for the callback of the migration job."
+      }
+    },
+    "responses": {
+      "Forbidden": {
+        "description": "User is not allowed to perform specified action",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error. Request should be retried",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Throttled": {
+        "description": "Too many requests in the given timeframe",
+        "headers": {
+          "Retry-After": {
+            "description": "Indicates how long the user agent should wait before making a follow-up request",
+            "schema": {
+              "maximum": 86400,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "NotImplemented": {
+        "description": "The server does not support the functionality required to fulfill the request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Authentication failed for the request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "BadRequestResponse": {
+        "description": "Invalid request data, permanent error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "keepRosterRestrictions": {
+        "name": "keepRosterRestrictions",
+        "in": "query",
+        "description": "Flag to limit restrictions on roster operations on a thread during 3rd party import process",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "syncState": {
+        "name": "syncState",
+        "in": "query",
+        "description": "Continuation token (limitation of the yaml, syncState/startTime only one is required)",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "startTime": {
+        "name": "startTime",
+        "in": "query",
+        "description": "The starting index of the range-query (limitation of the yaml, syncState/startTime only one is required)",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "pageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "description": "The number of messages being requested",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "startId": {
+        "name": "startId",
+        "in": "query",
+        "description": "Id of the message that should be returned first",
+        "schema": {
+          "type": "integer",
+          "default": 1
+        }
+      },
+      "endId": {
+        "name": "endId",
+        "in": "query",
+        "description": "Id of the message that should be returned last",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "sortOrderAsc": {
+        "name": "sortOrderAsc",
+        "in": "query",
+        "description": "true if sort order should be ASC",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "queryOnProperty": {
+        "name": "queryOnProperty",
+        "in": "query",
+        "description": "which message property should be used for querying",
+        "schema": {
+          "enum": [
+            "SequenceId",
+            "MessageId",
+            "MessageVersion"
+          ],
+          "type": "string",
+          "default": "SequenceId"
+        }
+      },
+      "hardDelete": {
+        "name": "hardDelete",
+        "in": "query",
+        "description": "determines the type of the deletion",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "view": {
+        "name": "view",
+        "in": "query",
+        "description": "which view should be used for retrieved members",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "selectMemberRoles": {
+        "name": "selectMemberRoles",
+        "in": "query",
+        "description": "which member roles (e.g. Admin, User) to select for the response members list.",
+        "style": "pipeDelimited",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "selectMemberProperties": {
+        "name": "selectMemberProperties",
+        "in": "query",
+        "description": "which member properties to include in the response members list. This should be a string of required member properties, each separated by a '|' character",
+        "style": "pipeDelimited",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "memberIds": {
+        "name": "memberIds",
+        "in": "query",
+        "description": "which members to include in the response members list. This should be a string of member IDs, each separated by a ',' character",
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Mri"
+          }
+        }
+      },
+      "continuationToken": {
+        "name": "continuationToken",
+        "in": "query",
+        "description": "used to query the next page of members. Should be the value in NextLink returned in the previous paginated response. RosterVersion, PageSize and SelectMemberRole values are encoded in the continuation token.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "membersPageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "description": "The number of members being requested",
+        "schema": {
+          "type": "integer",
+          "format": "uint32"
+        }
+      },
+      "paginatedQueryParameters": {
+        "name": "paginatedQueryParameters",
+        "in": "query",
+        "description": "Either {Continuation Token} or {Page Size, Roster Version, or Select Member Roles} or neither, but not both.",
+        "schema": {
+          "oneOf": [
+            null,
+            null
+          ]
+        }
+      },
+      "paginatedNonContinuationTokenParameters": {
+        "name": "paginatedNonContinuationTokenParameters",
+        "in": "query",
+        "description": "Page size, roster version, or select member roles, or none.",
+        "schema": {
+          "anyOf": [
+            null,
+            null,
+            null
+          ]
+        }
+      },
+      "rosterVersion": {
+        "name": "rosterVersion",
+        "in": "query",
+        "description": "Version of the roster for get members",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "conversationMri": {
+        "name": "conversationMri",
+        "in": "path",
+        "description": "Identifier of the conversation",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "bookmark": {
+        "name": "bookmark",
+        "in": "query",
+        "description": "Boolean to indicate whether force to update.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "requirePermanentJoinedState": {
+        "name": "requirePermanentJoinedState",
+        "in": "query",
+        "description": "Boolean to indicate whether require permanent joined state.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "userMri": {
+        "name": "userMri",
+        "in": "path",
+        "description": "Identifier of the user",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "threadId": {
+        "name": "threadId",
+        "in": "path",
+        "description": "Identifier of the thread",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "threadIds": {
+        "name": "threadIds",
+        "in": "query",
+        "description": "Comma-separated list of thread identifiers (MRIs)",
+        "required": true,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Mri"
+          }
+        }
+      },
+      "memberId": {
+        "name": "memberId",
+        "in": "path",
+        "description": "Member identifier",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "messageId": {
+        "name": "messageId",
+        "in": "path",
+        "description": "Message identifier",
+        "required": true,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "MSCV": {
+        "name": "MS-CV",
+        "in": "header",
+        "description": "Request correlation vector",
+        "schema": {
+          "type": "string",
+          "format": "CV"
+        }
+      },
+      "MsProduct": {
+        "name": "MS-Product",
+        "in": "header",
+        "description": "Specifies product name.",
+        "schema": {
+          "enum": [
+            "tfl",
+            "sfl"
+          ],
+          "type": "string"
+        }
+      },
+      "Skypetoken": {
+        "name": "Authentication",
+        "in": "header",
+        "description": "User's skypetoken. Mandatory for requests originating from clients. Expected format of header value: skypetoken=<value_of_skypetoken>",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "OnBehalfOf": {
+        "name": "OnBehalfOf",
+        "in": "header",
+        "description": "Request initiator Mri. Mandatory for partners calling the service",
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "endpointGuid": {
+        "name": "endpointGuid",
+        "in": "path",
+        "description": "Identifier of the endpoint",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "propertyName": {
+        "name": "propertyName",
+        "in": "path",
+        "description": "Thread property name",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "integrationId": {
+        "name": "integrationId",
+        "in": "path",
+        "description": "Identifier of the integration",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "integrationFullId": {
+        "name": "integrationFullId",
+        "in": "path",
+        "description": "Identifier of the integration in full format, expected format 28:integration:<integrationId>",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/Mri"
+        }
+      },
+      "dataSchema": {
+        "name": "dataSchema",
+        "in": "path",
+        "description": "the data schema of the integration message",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "token": {
+        "name": "token",
+        "in": "path",
+        "description": "integration token validated before posting the message",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "checkTime": {
+        "name": "checkTime",
+        "in": "query",
+        "description": "The point in time for which the response should be valid. For permissions call, the returned permissions were effective at the specified time. If not specified, the current time is assumed.",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "timeWindow": {
+        "name": "timeWindow",
+        "in": "query",
+        "description": "The granularity of the checkTime parameter. For permissions call, the returned permissions are a union of permissions present during the interval [checkTime - timeWindow, checkTime + timeWindow]",
+        "schema": {
+          "type": "string",
+          "format": "duration",
+          "default": "PT0S"
+        }
+      },
+      "startRosterVersion": {
+        "name": "startRosterVersion",
+        "in": "query",
+        "description": "Start roster version after which changelogs are needed.",
+        "schema": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      },
+      "endRosterVersion": {
+        "name": "endRosterVersion",
+        "in": "query",
+        "description": "The last roster version that should be fetched in the changelog. If not provided ulong.MaxValue will be used.",
+        "schema": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      },
+      "changelogPageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "description": "Requested number of changelog entries to be returned in response. If not provided, default values will be used.",
+        "schema": {
+          "type": "integer",
+          "format": "uint32"
+        }
+      },
+      "cursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Cursor for fetching paginated results.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "filter": {
+        "name": "filter",
+        "in": "query",
+        "description": "The filter type to get the annotations by",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "value": {
+        "name": "value",
+        "in": "query",
+        "description": "The value of the filter type to get the annotations by",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "streamName": {
+        "name": "streamName",
+        "in": "path",
+        "description": "Case-insensitive name of the stream.",
+        "required": true,
+        "schema": {
+          "enum": [
+            "notifications",
+            "starred",
+            "calllogs"
+          ],
+          "type": "string"
+        }
+      },
+      "replace": {
+        "name": "replace",
+        "in": "query",
+        "description": "Boolean to indicate if this update is replacing an existing annotation message property. Use \"replace=true\" to replace a message annotation. If \"replace\" is false, a new annotation by the user is added.",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "snapshotId": {
+        "name": "snapshotId",
+        "in": "path",
+        "description": "Snapshot identifier. Typically the user id.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "trigger": {
+        "name": "trigger",
+        "in": "query",
+        "description": "The trigger reason of the API. Identifies the delete scenario to trigger different business logic in SIS.",
+        "schema": {
+          "enum": [
+            "None",
+            "ThreadServiceDeleteMessage",
+            "ThreadServiceDeleteChat",
+            "ThreadServiceDeleteTeam",
+            "ThreadServiceDeleteChannel",
+            "RetentionDeleteMessage"
+          ],
+          "type": "string",
+          "default": "None"
+        }
+      },
+      "createTombstone": {
+        "name": "createTombstone",
+        "in": "query",
+        "description": "If set to true thread service will create the tombstone for the deleted entity.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "userPropertyName": {
+        "name": "name",
+        "in": "query",
+        "description": "User property name",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "allowDeleted": {
+        "name": "allowDeleted",
+        "in": "query",
+        "description": "Indictates if S2S operation should be allowed on soft deleted thread. Honored only if S2S partner is allowed to operate on deleted threads.",
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
+    "headers": {
+      "ThreadTypeHeader": {
+        "description": "Thread type",
+        "schema": {
+          "$ref": "#/components/schemas/ThreadType"
+        }
+      },
+      "Location": {
+        "description": "The location header giving URI of the resource just created.",
+        "schema": {
+          "$ref": "#/components/schemas/LocationType"
+        }
+      }
+    }
+  }
+}
