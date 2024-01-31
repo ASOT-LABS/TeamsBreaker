@@ -4,6 +4,7 @@ TeamsBreaker is a tool designed for automating the sending of phishing messages 
 
 Teams by default shows a warning message whenever a message is received from a user of another organization. TeamsBreaker uses different methods for bypassing this limitation, which are explained at the end of this README.
 
+Check [our whitepaper](https://up.nttdata.com/l/970163/2024-01-22/58n5n/970163/1705913860OSud8AHj/Using_Microsoft_Teams_for_Phishing.pdf) for an explanation of the techniques used by this tool :)
 
 # How to use
 
